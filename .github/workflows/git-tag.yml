@@ -1,0 +1,23 @@
+name: Git Tag
+
+
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+  tag:
+    name: Create git tag
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: '0'
+      - name: Git tag
+        uses: GRESB/action-git-tag@v1.13.0
+        id: git-tag
+        with:
+          create: true
+          github-token: ${{ secrets.BOT_PAT_REPO_ORG_ADMIN }}
