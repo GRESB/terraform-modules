@@ -1,0 +1,9 @@
+include:
+  - project: 'open-source-devex/gitlab-ci-config'
+    file: '/terraform-module.yaml'
+
+variables:
+  # Used by gitlab CI
+  GIT_SUBMODULE_STRATEGY: recursive
+  # Used by terraform validate
+  AWS_DEFAULT_REGION: foo

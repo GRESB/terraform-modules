@@ -1,0 +1,3 @@
+[submodule "0-cicd"]
+	path = 0-cicd
+	url = ../../0-cicd
