@@ -1,35 +1,22 @@
-# RDS Enhanced Monitoring Stack
-
-This module setups the DD RDS Enhanced Monitoring Stack.
-For this stack a lambda is used and that usually is obtained from a DD S3 bucket.
-however, the key for the object keeps changing and that breaks the module.
-To that end, the module expects a S3 bucket and a S3 object as input.
-The module contains an AWS SAM template adapted form the original.
-
-The source for both the SAM template and the lambda function code is this repo https://github.com/DataDog/datadog-serverless-functions/tree/master/aws/rds_enhanced_monitoring.
-Please upload the lambda zip to a S3 bucket and wire those parameters in the module.
-
-## Terraform docs
-
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.33 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.13 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.67.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.26.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_rds_cmk"></a> [rds\_cmk](#module\_rds\_cmk) | git::https://gitlab.com/open-source-devex/terraform-modules/aws/kms-key.git | v2.0.1 |
+| <a name="module_rds_cmk"></a> [rds\_cmk](#module\_rds\_cmk) | git::https://github.com/GRESB/terraform-modules.git//kms-key | v0.5.0 |
 | <a name="module_subscription"></a> [subscription](#module\_subscription) | ../rds-enhanced-cloudwatch-log-subscription | n/a |
 
 ## Resources
@@ -55,10 +42,11 @@ Please upload the lambda zip to a S3 bucket and wire those parameters in the mod
 | <a name="input_code_s3_bucket"></a> [code\_s3\_bucket](#input\_code\_s3\_bucket) | The bucket where the lambda function package can be found | `string` | n/a | yes |
 | <a name="input_code_s3_object"></a> [code\_s3\_object](#input\_code\_s3\_object) | The bucket object with the lambda function. Source https://github.com/DataDog/datadog-serverless-functions/tree/master/aws/rds_enhanced_monitoring | `string` | n/a | yes |
 | <a name="input_configure_rds_subscription"></a> [configure\_rds\_subscription](#input\_configure\_rds\_subscription) | Whether to enable the CloudWatch log subscription and ship logs to DD | `bool` | `true` | no |
-| <a name="input_custom_rds_stack_kms_key_policy"></a> [custom\_rds\_stack\_kms\_key\_policy](#input\_custom\_rds\_stack\_kms\_key\_policy) | A addition KMS Key policy | <pre>list(object({<br>    principals = list(object({<br>      type = string, identifiers = list(string)<br>    }))<br>    effect    = string<br>    actions   = list(string)<br>    resources = list(string)<br>    condition = list(object({<br>      test     = string<br>      variable = string<br>      values   = list(string)<br>    }))<br>  }))</pre> | `[]` | no |
+| <a name="input_custom_rds_stack_kms_key_policy"></a> [custom\_rds\_stack\_kms\_key\_policy](#input\_custom\_rds\_stack\_kms\_key\_policy) | A addition KMS Key policy | <pre>list(object({<br/>    principals = list(object({<br/>      type = string, identifiers = list(string)<br/>    }))<br/>    effect    = string<br/>    actions   = list(string)<br/>    resources = list(string)<br/>    condition = list(object({<br/>      test     = string<br/>      variable = string<br/>      values   = list(string)<br/>    }))<br/>  }))</pre> | `[]` | no |
 | <a name="input_custom_rds_stack_python_version"></a> [custom\_rds\_stack\_python\_version](#input\_custom\_rds\_stack\_python\_version) | Python version to use for Lambda Function | `string` | `"python3.7"` | no |
 | <a name="input_custom_rds_stack_template"></a> [custom\_rds\_stack\_template](#input\_custom\_rds\_stack\_template) | A stack template to be used instead of the default DD stack template | `string` | `null` | no |
 | <a name="input_datadog_api_key_secret_arn"></a> [datadog\_api\_key\_secret\_arn](#input\_datadog\_api\_key\_secret\_arn) | The ARN of a AWS SecretsManager secret containing the DD API key to be used in the forwarding stack | `string` | n/a | yes |
+| <a name="input_datadog_integration_role_arn"></a> [datadog\_integration\_role\_arn](#input\_datadog\_integration\_role\_arn) | The datadog aws integration role arn. | `string` | n/a | yes |
 | <a name="input_datadog_site"></a> [datadog\_site](#input\_datadog\_site) | The DD site to set as a parameter to the cloudFormation stack | `string` | `"datadoghq.eu"` | no |
 | <a name="input_name_prefix"></a> [name\_prefix](#input\_name\_prefix) | Name prefix for all resources that will take them | `string` | `""` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags appended to all resources that will take them | `map(string)` | `{}` | no |
@@ -76,4 +64,4 @@ Please upload the lambda zip to a S3 bucket and wire those parameters in the mod
 | <a name="output_rds_enhanced_iam_role_name"></a> [rds\_enhanced\_iam\_role\_name](#output\_rds\_enhanced\_iam\_role\_name) | n/a |
 | <a name="output_rds_enhanced_stack_id"></a> [rds\_enhanced\_stack\_id](#output\_rds\_enhanced\_stack\_id) | n/a |
 | <a name="output_rds_enhanced_stack_outputs"></a> [rds\_enhanced\_stack\_outputs](#output\_rds\_enhanced\_stack\_outputs) | n/a |
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- END_TF_DOCS -->

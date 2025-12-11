@@ -61,7 +61,7 @@ Multiple state files can be supported via this module. Each state file will be c
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_cmk"></a> [cmk](#module\_cmk) | git::https://gitlab.com/open-source-devex/terraform-modules/aws/kms-key.git | v2.0.2 |
+| <a name="module_cmk"></a> [cmk](#module\_cmk) | git::https://github.com/GRESB/terraform-modules.git//kms-key | v0.5.0 |
 | <a name="module_path_based_permissions"></a> [path\_based\_permissions](#module\_path\_based\_permissions) | ./modules/path-based-permissions | n/a |
 | <a name="module_s3_bucket"></a> [s3\_bucket](#module\_s3\_bucket) | terraform-aws-modules/s3-bucket/aws | ~> 4.2 |
 
