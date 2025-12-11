@@ -6,12 +6,9 @@ locals {
   iam_full_access_policy = join("", data.aws_iam_policy_document.full_access.*.json)
 }
 
-# The use of this data source is crashing the aws provider (version 4 and above),
-# hence it's commented out until the provider is fixed.
-# See: https://github.com/hashicorp/terraform-provider-aws/issues/24366
-#data "aws_iam_policy_document" "final" {
-#  source_policy_documents = coalesce([local.iam_read_only_policy, local.iam_full_access_policy])
-#}
+data "aws_iam_policy_document" "final" {
+  source_policy_documents = coalesce([local.iam_read_only_policy, local.iam_full_access_policy])
+}
 
 data "aws_iam_policy_document" "read_only" {
   count = local.setup_read_only_access ? 1 : 0
