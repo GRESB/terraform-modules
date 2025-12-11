@@ -25,7 +25,5 @@ resource "aws_ecr_repository_policy" "ecr" {
   count = local.setup_read_only_access || local.setup_full_access_access ? 1 : 0
 
   repository = aws_ecr_repository.ecr.name
-  # The use of the data source is crashing the aws provider (see iam.tf for more details)
-  #  policy     = data.aws_iam_policy_document.final.json
-  policy = local.setup_read_only_access ? local.iam_read_only_policy : local.iam_full_access_policy
+  policy     = data.aws_iam_policy_document.final.json
 }
