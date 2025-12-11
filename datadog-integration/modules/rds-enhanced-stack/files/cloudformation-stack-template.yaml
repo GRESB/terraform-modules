@@ -1,0 +1,75 @@
+# Source: https://raw.githubusercontent.com/DataDog/datadog-serverless-functions/master/aws/rds_enhanced_monitoring/rds-enhanced-sam-template.yaml
+#
+# When updating make sure to double escape any CloudFormation variables, like $${AWS::Partition} (double $)
+# and to template the required variables kmsEncryptedKeys and DD_SITE
+#
+# This template is extended with VPC configuration parameters to allow deploying the function to a specific VPC.
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Pushes RDS Enhanced metrics to Datadog.
+Parameters:
+  KMSKeyId:
+    Type: String
+    Description: The id (final part of the key's ARN) of a KMS key used to encrypt and decrypt your Datadog API and App keys.
+  DdUseVPC:
+    Type: String
+    Default: false
+    AllowedValues:
+      - true
+      - false
+    Description: Set to true to deploy the Forwarder to a VPC and send logs, metrics, and traces via a proxy. When set to true, must also set VPCSecurityGroupIds and VPCSubnetIds.
+  VPCSecurityGroupIds:
+    Type: CommaDelimitedList
+    Default: ""
+    Description: Comma separated list of VPC Security Group Ids. Used when DdUseVPC is enabled.
+  VPCSubnetIds:
+    Type: CommaDelimitedList
+    Default: ""
+    Description: Comma separated list of VPC Subnet Ids. Used when DdUsePrivateLink or DdUseVPC is enabled.
+Conditions:
+  UseVPC:
+    Fn::Equals:
+      - Ref: DdUseVPC
+      - true
+Resources:
+  rdslambdaddfunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Description: Pushes RDS Enhanced metrics to Datadog.
+      Environment:
+        Variables:
+          # these variables need to be maintained (they are not part of the upstream template)
+          DD_API_KEY_SECRET_ARN: "${dd_api_secret_arn}"
+          DD_SITE: "${datadog_site}"
+      Handler: lambda_function.lambda_handler
+      MemorySize: 128
+      Role: ${lambda_role_arn}
+      Policies:
+        KMSDecryptPolicy:
+          KeyId: !Ref KMSKeyId
+      Runtime: ${python_version}
+      Timeout: 10
+      KmsKeyArn:
+        Fn::Sub:
+          - arn:$${AWS::Partition}:kms:$${AWS::Region}:$${AWS::AccountId}:key/$${keyId}
+          - keyId:
+              Ref: KMSKeyId
+      CodeUri:
+        Bucket: ${code_s3_bucket}
+        Key: ${code_s3_object}
+      VpcConfig:
+        Fn::If:
+          - UseVPC
+          - SecurityGroupIds: !Ref VPCSecurityGroupIds
+            SubnetIds: !Ref VPCSubnetIds
+          - Ref: AWS::NoValue
+Outputs:
+  DatadogRdsArn:
+    Description: Datadog RDS Enhanced Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+        - rdslambdaddfunction
+        - Arn
+    Export:
+      Name:
+        Fn::Sub: $${AWS::StackName}-RdsArn
