@@ -14,7 +14,7 @@ To create certificates in different regions for the same domain names, validatio
 ### Create certificate in same account as DNZ zone
 ```hcl-terraform
 module "tls_cert" {
-  source = "git://gitlab.com/open-source-devex/terraform-modules/aws/tls-certificate.git?ref=v4.0.0"
+  source = "git::https://github.com/GRESB/terraform-modules.git//tls-certificate?ref=v0.5.0"
 
   certificate_name = "my-tls-certificate"
   domain_name      = "example.com"
@@ -37,7 +37,7 @@ module "tls_cert" {
 ### Create certificate in one account while DNS zone is in a different account
 ```hcl-terraform
 module "tls_cert" {
-  source = "git::https://gitlab.com/open-source-devex/terraform-modules/aws/tls-certificate.git?ref=v4.0.0"
+  source = "git::https://github.com/GRESB/terraform-modules.git//tls-certificate?ref=v0.5.0"
 
   certificate_name = "my-tls-certificate"
   domain_name      = "example.com"
@@ -61,7 +61,7 @@ module "tls_cert" {
 ### Create certificates using the same names in different regions
 ```hcl-terraform
 module "tls_cert_eu_central_1" {
-  source = "git::https://gitlab.com/open-source-devex/terraform-modules/aws/tls-certificate.git?ref=v4.0.0"
+  source = "git::https://github.com/GRESB/terraform-modules.git//tls-certificate?ref=v0.5.0"
 
   certificate_name = "my-tls-certificate"
   domain_name      = "example.com"
@@ -82,7 +82,7 @@ module "tls_cert_eu_central_1" {
 }
 
 module "tls_cert_us_east_1" {
-  source = "git::https://gitlab.com/open-source-devex/terraform-modules/aws/tls-certificate.git?ref=v4.0.0"
+  source = "git::https://github.com/GRESB/terraform-modules.git//tls-certificate?ref=v0.5.0"
 
   certificate_name = "my-tls-certificate"
   domain_name      = "example.com"
@@ -109,7 +109,7 @@ module "tls_cert_us_east_1" {
 
 ## Terraform docs
 
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 No requirements.
@@ -118,8 +118,8 @@ No requirements.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.63.0 |
-| <a name="provider_aws.dns_zone"></a> [aws.dns\_zone](#provider\_aws.dns\_zone) | 3.63.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.26.0 |
+| <a name="provider_aws.dns_zone"></a> [aws.dns\_zone](#provider\_aws.dns\_zone) | 6.26.0 |
 
 ## Modules
 
@@ -156,4 +156,4 @@ No modules.
 | <a name="output_dns_zone_id"></a> [dns\_zone\_id](#output\_dns\_zone\_id) | The DNS Zone ID used to create the validation records for the certificate |
 | <a name="output_domain_validation_options"></a> [domain\_validation\_options](#output\_domain\_validation\_options) | CNAME records that are added to the DNS zone to complete certificate validation |
 | <a name="output_id"></a> [id](#output\_id) | The ARN of the certificate |
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- END_TF_DOCS -->

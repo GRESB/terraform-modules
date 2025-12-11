@@ -6,7 +6,7 @@ Terraform module to create an ECR repository
 
 ```hcl-terraform
 module "ecr" {
-  source = "git::https://gitlab.com/open-source-devex/terraform-modules/aws/ecr-repository.git?ref=v2.0.1"
+  source = "git::https://github.com/GRESB/terraform-modules.git//ecr-repository?ref=v0.5.0"
 
   project     = "open-source-devex"
   environment = "test"
@@ -44,7 +44,7 @@ EOD
 
 ## Terraform docs
 
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 No requirements.
@@ -53,7 +53,7 @@ No requirements.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.11.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.26.0 |
 
 ## Modules
 
@@ -95,4 +95,4 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_registry"></a> [registry](#output\_registry) | n/a |
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- END_TF_DOCS -->

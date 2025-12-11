@@ -1,0 +1,42 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+        args: ["--allow-multiple-documents"]
+        exclude: ".terragrunt-cache"
+      - id: end-of-file-fixer
+        exclude: ".terragrunt-cache|kubeconfig_*|docs/ecrs-list.md|docs/aws-accounts-and-roles.md|.txt"
+      - id: trailing-whitespace
+        exclude: ".terragrunt-cache|docs/ecrs-list.md"
+      - id: check-case-conflict
+        exclude: ".terragrunt-cache"
+      - id: check-merge-conflict
+        exclude: ".terragrunt-cache"
+      - id: check-executables-have-shebangs
+        exclude: ".terragrunt-cache"
+
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    # new version has issue https://github.com/antonbabenko/pre-commit-terraform/issues/640
+    rev: v1.88.0
+    hooks:
+      - id: terraform_fmt
+        exclude: ".terragrunt-cache"
+      - id: terraform_validate
+        exclude: ".terragrunt-cache"
+
+  - repo: https://github.com/terraform-docs/terraform-docs
+    rev: v0.20.0
+    hooks:
+      - id: terraform-docs-go
+        language_version: "1.24.6"
+        exclude: ".terragrunt-cache|README.md"
+        args: ["markdown", "--recursive-include-main=false", "--recursive-path=.", "--recursive", "--output-file", "README.md", "."]
+
+  - repo: https://github.com/gruntwork-io/pre-commit
+    rev: v0.1.30
+    hooks:
+      - id: tflint
+      - id: shellcheck
+      - id: gofmt
+      - id: golint

@@ -6,7 +6,7 @@ Terraform module to provision KMS keys
 
 ```hcl-terraform
 module "kms_key" {
-  source = "git::https://gitlab.com/open-source-devex/terraform-modules/aws/kms-key.git?ref=v2.0.0"
+  source = "git::https://github.com/GRESB/terraform-modules.git//kms-key?ref=v0.5.0"
 
   key_name        = "my-kms-key"
   key_description = "A KMS key"
@@ -46,7 +46,7 @@ module "kms_key" {
 
 ## Terraform docs
 
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 No requirements.
@@ -55,8 +55,8 @@ No requirements.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.84.0 |
-| <a name="provider_random"></a> [random](#provider\_random) | 3.6.3 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.26.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.7.2 |
 
 ## Modules
 
@@ -99,4 +99,4 @@ No modules.
 | <a name="output_key_alias_name"></a> [key\_alias\_name](#output\_key\_alias\_name) | n/a |
 | <a name="output_key_arn"></a> [key\_arn](#output\_key\_arn) | n/a |
 | <a name="output_key_id"></a> [key\_id](#output\_key\_id) | n/a |
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- END_TF_DOCS -->

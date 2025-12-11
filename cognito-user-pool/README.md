@@ -8,7 +8,7 @@ Terraform module to build and manage a Cognito user pool.
 
 ```hcl-terraform
 module "cognito_user_pool" {
-  source = "git::https://gitlab.com/open-source-devex/terraform-modules/aws/cognito-user-pool.git?ref=v3.0.0"
+  source = "git::https://github.com/GRESB/terraform-modules.git//cognito-user-pool?ref=v0.5.0"
 
   project     = "my-project"
   environment = "my-environment"
@@ -28,7 +28,7 @@ module "cognito_user_pool" {
 
 ```hcl-terraform
 module "cognito_user_pool" {
-  source = "git::https://gitlab.com/open-source-devex/terraform-modules/aws/cognito-user-pool.git?ref=v3.0.0"
+  source = "git::https://github.com/GRESB/terraform-modules.git//cognito-user-pool?ref=v0.5.0"
 
   project     = "my-project"
   environment = "my-environment"
@@ -42,7 +42,7 @@ module "cognito_user_pool" {
 
 ## Docs
 
-<!-- BEGINNING OF PRE-COMMIT-OPENTOFU DOCS HOOK -->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
@@ -53,7 +53,7 @@ module "cognito_user_pool" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.15.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.26.0 |
 
 ## Modules
 
@@ -120,4 +120,4 @@ No modules.
 | <a name="output_user_pool_domain_name"></a> [user\_pool\_domain\_name](#output\_user\_pool\_domain\_name) | n/a |
 | <a name="output_user_pool_endpoint"></a> [user\_pool\_endpoint](#output\_user\_pool\_endpoint) | n/a |
 | <a name="output_user_pool_id"></a> [user\_pool\_id](#output\_user\_pool\_id) | n/a |
-<!-- END OF PRE-COMMIT-OPENTOFU DOCS HOOK -->
+<!-- END_TF_DOCS -->

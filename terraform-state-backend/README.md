@@ -12,7 +12,7 @@ This module includes a submodule that creates path based permissions for the ter
 
 ```hcl
 module "state_backend" {
-  source = "git::https://gitlab.com/open-source-devex/terraform-modules/aws/terraform-state-backend?ref=v5.0.0"
+  source = "git::https://github.com/GRESB/terraform-modules.git//terraform-state-backend?ref=v0.5.0"
 
   bucket_name = var.bucket_name
   bucket_acl  = "private"
@@ -41,21 +41,21 @@ Multiple state files can be supported via this module. Each state file will be c
 
 ## Terraform docs
 
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.3 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.9 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.13 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.45.0 |
-| <a name="provider_local"></a> [local](#provider\_local) | 2.2.3 |
-| <a name="provider_null"></a> [null](#provider\_null) | 3.2.1 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.26.0 |
+| <a name="provider_local"></a> [local](#provider\_local) | 2.6.1 |
+| <a name="provider_null"></a> [null](#provider\_null) | 3.2.4 |
 
 ## Modules
 
@@ -63,7 +63,7 @@ Multiple state files can be supported via this module. Each state file will be c
 |------|--------|---------|
 | <a name="module_cmk"></a> [cmk](#module\_cmk) | git::https://gitlab.com/open-source-devex/terraform-modules/aws/kms-key.git | v2.0.2 |
 | <a name="module_path_based_permissions"></a> [path\_based\_permissions](#module\_path\_based\_permissions) | ./modules/path-based-permissions | n/a |
-| <a name="module_s3_bucket"></a> [s3\_bucket](#module\_s3\_bucket) | terraform-aws-modules/s3-bucket/aws | 3.6.0 |
+| <a name="module_s3_bucket"></a> [s3\_bucket](#module\_s3\_bucket) | terraform-aws-modules/s3-bucket/aws | ~> 4.2 |
 
 ## Resources
 
@@ -76,7 +76,6 @@ Multiple state files can be supported via this module. Each state file will be c
 | [local_file.generate_remote_state_config_file](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
 | [null_resource.create_remote_state_config_path](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
-| [aws_iam_policy_document.prevent_unencrypted_uploads](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.tf_backend_full_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
@@ -89,13 +88,14 @@ Multiple state files can be supported via this module. Each state file will be c
 | <a name="input_block_public_policy"></a> [block\_public\_policy](#input\_block\_public\_policy) | Whether Amazon S3 should block public bucket policies for this bucket. | `bool` | `true` | no |
 | <a name="input_bucket_acl"></a> [bucket\_acl](#input\_bucket\_acl) | The ACL to apply on the bucket. | `string` | `"private"` | no |
 | <a name="input_bucket_name"></a> [bucket\_name](#input\_bucket\_name) | The name of the bucket. | `string` | n/a | yes |
+| <a name="input_bucket_policy"></a> [bucket\_policy](#input\_bucket\_policy) | The S3 bucket policy to apply to the bucket. If `prevent_unencrypted_uploads` is true, this will be merged with the policy that prevents unencrypted uploads. | `string` | `""` | no |
 | <a name="input_common_tags"></a> [common\_tags](#input\_common\_tags) | Tags to apply on all resources. | `map(string)` | `{}` | no |
 | <a name="input_create_dynamo_lock_table"></a> [create\_dynamo\_lock\_table](#input\_create\_dynamo\_lock\_table) | Whether to create a DynamoDB table for locking state files. | `bool` | `true` | no |
 | <a name="input_force_destroy"></a> [force\_destroy](#input\_force\_destroy) | Whether terraform should attempt to destroy the S3 bucket even when it isn't empty. | `bool` | `false` | no |
 | <a name="input_generate_remote_state_config_file"></a> [generate\_remote\_state\_config\_file](#input\_generate\_remote\_state\_config\_file) | Whether terraform should generate backend config as yaml. | `bool` | `false` | no |
 | <a name="input_ignore_public_acls"></a> [ignore\_public\_acls](#input\_ignore\_public\_acls) | Whether Amazon S3 should ignore public ACLs for this bucket. | `bool` | `true` | no |
 | <a name="input_kms_deletion_window"></a> [kms\_deletion\_window](#input\_kms\_deletion\_window) | The KMS key deletion window. | `number` | `10` | no |
-| <a name="input_path_based_permissions"></a> [path\_based\_permissions](#input\_path\_based\_permissions) | Configuration for assigning path based permissions to users and roles. Each element's `principal_type` is either `user` or `role, `principal\_name` is the respective name, `paths` is a of paths in the S3 bucket possibly containing `*` wildcards, `action` is either `read` or `read-write`.` | <pre>map(object({<br>    principal_type = string<br>    principal_name = string<br>    paths          = list(string)<br>    action         = string<br>  }))</pre> | `{}` | no |
+| <a name="input_path_based_permissions"></a> [path\_based\_permissions](#input\_path\_based\_permissions) | Configuration for assigning path based permissions to users and roles. Each element's `principal_type` is either `user` or `role, `principal\_name` is the respective name, `paths` is a of paths in the S3 bucket possibly containing `*` wildcards, `action` is either `read` or `read-write`.` | <pre>map(object({<br/>    principal_type = string<br/>    principal_name = string<br/>    paths          = list(string)<br/>    action         = string<br/>  }))</pre> | `{}` | no |
 | <a name="input_prevent_unencrypted_uploads"></a> [prevent\_unencrypted\_uploads](#input\_prevent\_unencrypted\_uploads) | Whether to configure the bucket to prevent upload of unencrypted objects. | `bool` | `true` | no |
 | <a name="input_remote_state_config_file_path"></a> [remote\_state\_config\_file\_path](#input\_remote\_state\_config\_file\_path) | Where the remote state config should be stored. | `string` | `"remote-state-config.yaml"` | no |
 | <a name="input_restrict_public_buckets"></a> [restrict\_public\_buckets](#input\_restrict\_public\_buckets) | Whether Amazon S3 should restrict public bucket policies for this bucket. | `bool` | `true` | no |
@@ -118,4 +118,4 @@ Multiple state files can be supported via this module. Each state file will be c
 | <a name="output_s3_bucket_lock_table_id"></a> [s3\_bucket\_lock\_table\_id](#output\_s3\_bucket\_lock\_table\_id) | n/a |
 | <a name="output_s3_bucket_lock_table_name"></a> [s3\_bucket\_lock\_table\_name](#output\_s3\_bucket\_lock\_table\_name) | n/a |
 | <a name="output_s3_bucket_region"></a> [s3\_bucket\_region](#output\_s3\_bucket\_region) | n/a |
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- END_TF_DOCS -->

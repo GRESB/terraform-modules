@@ -107,7 +107,7 @@ data "aws_caller_identity" "current" {}
 
 # https://docs.aws.amazon.com/awscloudtrail/latest/userguide/create-kms-key-policy-for-cloudtrail.html
 module "bucket_cmk" {
-  source = "git::https://gitlab.com/open-source-devex/terraform-modules/aws/kms-key.git?ref=v1.0.1"
+  source = "git::https://github.com/GRESB/terraform-modules.git//kms-key?ref=v0.5.0"
 
   key_name        = var.bucket_name
   key_description = "CMK for S3 bucket ${var.bucket_name}"
