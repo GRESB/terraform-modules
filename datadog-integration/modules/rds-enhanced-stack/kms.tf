@@ -56,7 +56,7 @@ locals {
 }
 
 module "rds_cmk" {
-  source = "git::https://gitlab.com/open-source-devex/terraform-modules/aws/kms-key.git?ref=v2.1.0"
+  source = "git::https://github.com/GRESB/terraform-modules.git//kms-key?ref=v0.5.0"
 
   key_name        = "${local.resource_name_prefix}-datadog-rds-stack"
   key_description = "CMK for DD RDS Enhanced Stack ${local.resource_name_prefix}"

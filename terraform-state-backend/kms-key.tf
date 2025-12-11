@@ -14,7 +14,7 @@ locals {
 }
 
 module "cmk" {
-  source = "git::https://gitlab.com/open-source-devex/terraform-modules/aws/kms-key.git?ref=v2.0.2"
+  source = "git::https://github.com/GRESB/terraform-modules.git//kms-key?ref=v0.5.0"
 
   key_name                    = local.cmk_name
   key_description             = "CMK for S3 bucket ${var.bucket_name}"
