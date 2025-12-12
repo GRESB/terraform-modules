@@ -89,7 +89,7 @@ resource "aws_guardduty_organization_configuration_feature" "org_malware_protect
   detector_id = one(aws_guardduty_detector.detector[*].id)
 
   name        = "EBS_MALWARE_PROTECTION"
-  auto_enable = "NEW"
+  auto_enable = "ALL"
 }
 
 resource "aws_guardduty_member" "members" {
