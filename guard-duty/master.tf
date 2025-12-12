@@ -66,24 +66,30 @@ resource "aws_guardduty_organization_configuration" "org" {
   detector_id = one(aws_guardduty_detector.detector[*].id)
 
   auto_enable_organization_members = var.auto_enable_organization_members
+}
 
-  datasources {
-    s3_logs {
-      auto_enable = true
-    }
-    kubernetes {
-      audit_logs {
-        enable = true
-      }
-    }
-    malware_protection {
-      scan_ec2_instance_with_findings {
-        ebs_volumes {
-          auto_enable = true
-        }
-      }
-    }
-  }
+resource "aws_guardduty_organization_configuration_feature" "org_s3_log" {
+
+  detector_id = one(aws_guardduty_detector.detector[*].id)
+
+  name        = "S3_DATA_EVENTS"
+  auto_enable = "ALL"
+}
+
+resource "aws_guardduty_organization_configuration_feature" "org_k8s_log" {
+
+  detector_id = one(aws_guardduty_detector.detector[*].id)
+
+  name        = "EKS_AUDIT_LOGS"
+  auto_enable = "ALL"
+}
+
+resource "aws_guardduty_organization_configuration_feature" "org_malware_protection" {
+
+  detector_id = one(aws_guardduty_detector.detector[*].id)
+
+  name        = "EBS_MALWARE_PROTECTION"
+  auto_enable = "NEW"
 }
 
 resource "aws_guardduty_member" "members" {

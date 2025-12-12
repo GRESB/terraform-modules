@@ -4,16 +4,8 @@ locals {
 
 resource "aws_cognito_user_pool" "default" {
   name                     = local.user_pool_name
-  alias_attributes         = length(var.user_pool_alias_attributes) > 0 ? var.user_pool_alias_attributes : null
-  username_attributes      = length(var.user_pool_username_attributes) > 0 ? var.user_pool_username_attributes : null
+  alias_attributes         = var.user_pool_alias_attributes
   auto_verified_attributes = var.user_pool_auto_verified_attributes
-
-  dynamic "username_configuration" {
-    for_each = var.username_case_sensitive != null ? [var.username_case_sensitive] : []
-    content {
-      case_sensitive = username_configuration.value
-    }
-  }
 
   password_policy {
     minimum_length                   = var.user_pool_password_min_length
@@ -29,43 +21,27 @@ resource "aws_cognito_user_pool" "default" {
     environment = var.environment
   }
 
-  dynamic "schema" {
-    for_each = var.default_user_pool_schema ? {} : var.user_pool_schema
+  schema {
+    mutable             = true
+    attribute_data_type = "String"
+    name                = "email"
+    required            = true
 
-    content {
-      attribute_data_type      = schema.value["attribute_data_type"]
-      name                     = schema.value["name"]
-      mutable                  = try(schema.value["mutable"], null)
-      required                 = try(schema.value["required"], null)
-      developer_only_attribute = try(schema.value["developer_only_attribute"], null)
+    string_attribute_constraints {
+      max_length = 256
+      min_length = 5
+    }
+  }
 
-      dynamic "number_attribute_constraints" {
-        # Using ["number_attribute_constraints"] as a non null value because if we use
-        # schema.value["number_attribute_constraints"], even after the null check, there will be an error saying
-        # Error: Invalid dynamic for_each value:
-        #    schema.value["string_attribute_constraints"] is null
-        # Cannot use a null value in for_each.
-        for_each = schema.value["number_attribute_constraints"] != null ? ["number_attribute_constraints"] : []
+  schema {
+    mutable             = true
+    attribute_data_type = "String"
+    name                = "name"
+    required            = true
 
-        content {
-          max_value = schema.value["number_attribute_constraints"]["max_value"]
-          min_value = schema.value["number_attribute_constraints"]["min_value"]
-        }
-      }
-
-      dynamic "string_attribute_constraints" {
-        # Using ["string_attribute_constraints"] as a non null value because if we use
-        # schema.value["string_attribute_constraints"], even after the null check, there will be an error saying
-        # Error: Invalid dynamic for_each value:
-        #    schema.value["string_attribute_constraints"] is null
-        # Cannot use a null value in for_each.
-        for_each = schema.value["string_attribute_constraints"] != null ? ["string_attribute_constraints"] : []
-
-        content {
-          max_length = schema.value["string_attribute_constraints"]["max_length"]
-          min_length = schema.value["string_attribute_constraints"]["min_length"]
-        }
-      }
+    string_attribute_constraints {
+      max_length = 50
+      min_length = 5
     }
   }
 
@@ -80,24 +56,36 @@ resource "aws_cognito_user_pool" "default" {
     }
   }
 
-  dynamic "device_configuration" {
-    for_each = var.remember_device == "never" ? [] : [var.remember_device]
+  dynamic "schema" {
+    for_each = var.user_pool_custom_attributes
 
     content {
-      device_only_remembered_on_user_prompt = var.remember_device == "always" ? false : true
-      challenge_required_on_new_device      = var.challenge_required_on_new_device
+      name                     = schema.value.name
+      attribute_data_type      = schema.value.attribute_data_type
+      developer_only_attribute = schema.value.developer_only_attribute
+      mutable                  = schema.value.mutable
+
+      dynamic "number_attribute_constraints" {
+        for_each = schema.value.number_attribute_constraints != null ? ["number_attribute_constraints"] : []
+
+        content {
+          min_value = schema.value.number_attribute_constraints.min_value
+          max_value = schema.value.number_attribute_constraints.max_value
+        }
+      }
+
+      dynamic "string_attribute_constraints" {
+        for_each = schema.value.string_attribute_constraints != null ? ["string_attribute_constraints"] : []
+
+        content {
+          min_length = schema.value.string_attribute_constraints.min_length
+          max_length = schema.value.string_attribute_constraints.max_length
+        }
+      }
     }
   }
 
-  dynamic "verification_message_template" {
-    for_each = var.verification_message_template != null ? [var.verification_message_template] : []
-    content {
-      default_email_option  = verification_message_template.value["default_email_option"]
-      email_message         = verification_message_template.value["email_message"]
-      email_message_by_link = verification_message_template.value["email_message_by_link"]
-      email_subject         = verification_message_template.value["email_subject"]
-      email_subject_by_link = verification_message_template.value["email_subject_by_link"]
-      sms_message           = verification_message_template.value["sms_message"]
-    }
+  device_configuration {
+    device_only_remembered_on_user_prompt = var.remember_device
   }
 }
