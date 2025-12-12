@@ -51,7 +51,7 @@ config  = {
   # in terragrunt projects this key is best prefixed with the path to the module to avoid overwriting it
   # like:  key = "$${path_relative_to_include()}/terraform.tfstate"
   key            = "terraform.tfstate"
-  region         = "${data.aws_region.current.name}"
+  region         = "${data.aws_region.current.region}"
   encrypt        = true
   # Omit dynamo DB if locking is disabled
   dynamodb_table = "${join("", aws_dynamodb_table.tf_backend.*.name)}"
@@ -67,7 +67,7 @@ resource "local_file" "generate_remote_state_config_file" {
   file_permission = "0600"
 
   content = yamlencode({
-    region         = data.aws_region.current.name
+    region         = data.aws_region.current.region
     bucket         = module.s3_bucket.s3_bucket_id
     dynamodb_table = module.s3_bucket.s3_bucket_id
     encrypt        = true

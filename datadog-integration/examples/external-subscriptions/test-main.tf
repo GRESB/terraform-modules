@@ -151,7 +151,7 @@ variable "bucket1_name" {
 
 module "bucket1" {
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "~> 3"
+  version = "~> 5.9"
 
   bucket        = var.bucket1_name
   acl           = "log-delivery-write"
@@ -181,7 +181,7 @@ variable "bucket2_name" {
 
 module "bucket2" {
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "~> 3"
+  version = "~> 5.9"
 
   bucket        = var.bucket2_name
   acl           = "log-delivery-write"
