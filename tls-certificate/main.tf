@@ -19,7 +19,3 @@ resource "aws_acm_certificate" "default" {
     create_before_destroy = true
   }
 }
-
-provider "aws" {
-  alias = "dns_zone"
-}
