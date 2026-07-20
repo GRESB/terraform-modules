@@ -92,6 +92,22 @@ resource "aws_guardduty_organization_configuration_feature" "org_malware_protect
   auto_enable = "ALL"
 }
 
+resource "aws_guardduty_organization_configuration_feature" "org_rds_login" {
+
+  detector_id = one(aws_guardduty_detector.detector[*].id)
+
+  name        = "RDS_LOGIN_EVENTS"
+  auto_enable = "ALL"
+}
+
+resource "aws_guardduty_organization_configuration_feature" "org_lambda_network" {
+
+  detector_id = one(aws_guardduty_detector.detector[*].id)
+
+  name        = "LAMBDA_NETWORK_LOGS"
+  auto_enable = "ALL"
+}
+
 resource "aws_guardduty_member" "members" {
   count = local.is_guardduty_master && !var.enable_organization ? length(var.member_list) : 0
 
