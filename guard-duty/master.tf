@@ -68,7 +68,12 @@ resource "aws_guardduty_organization_configuration" "org" {
   auto_enable_organization_members = var.auto_enable_organization_members
 }
 
+# Org-wide auto-enable features. Only the org master/delegated admin can set
+# these, and they reference the detector id, so they must be gated on the same
+# condition as the other master-only resources — otherwise `detector_id`
+# resolves to null in accounts where no detector is created (e.g. members).
 resource "aws_guardduty_organization_configuration_feature" "org_s3_log" {
+  count = local.is_guardduty_master && var.enable_organization ? 1 : 0
 
   detector_id = one(aws_guardduty_detector.detector[*].id)
 
@@ -77,6 +82,7 @@ resource "aws_guardduty_organization_configuration_feature" "org_s3_log" {
 }
 
 resource "aws_guardduty_organization_configuration_feature" "org_k8s_log" {
+  count = local.is_guardduty_master && var.enable_organization ? 1 : 0
 
   detector_id = one(aws_guardduty_detector.detector[*].id)
 
@@ -85,6 +91,7 @@ resource "aws_guardduty_organization_configuration_feature" "org_k8s_log" {
 }
 
 resource "aws_guardduty_organization_configuration_feature" "org_malware_protection" {
+  count = local.is_guardduty_master && var.enable_organization ? 1 : 0
 
   detector_id = one(aws_guardduty_detector.detector[*].id)
 
@@ -93,6 +100,7 @@ resource "aws_guardduty_organization_configuration_feature" "org_malware_protect
 }
 
 resource "aws_guardduty_organization_configuration_feature" "org_rds_login" {
+  count = local.is_guardduty_master && var.enable_organization ? 1 : 0
 
   detector_id = one(aws_guardduty_detector.detector[*].id)
 
@@ -101,11 +109,29 @@ resource "aws_guardduty_organization_configuration_feature" "org_rds_login" {
 }
 
 resource "aws_guardduty_organization_configuration_feature" "org_lambda_network" {
+  count = local.is_guardduty_master && var.enable_organization ? 1 : 0
 
   detector_id = one(aws_guardduty_detector.detector[*].id)
 
   name        = "LAMBDA_NETWORK_LOGS"
   auto_enable = "ALL"
+}
+
+# Preserve state for consumers upgrading from a version where these features had
+# no count (unindexed -> [0]), so the guard does not destroy/recreate them.
+moved {
+  from = aws_guardduty_organization_configuration_feature.org_s3_log
+  to   = aws_guardduty_organization_configuration_feature.org_s3_log[0]
+}
+
+moved {
+  from = aws_guardduty_organization_configuration_feature.org_k8s_log
+  to   = aws_guardduty_organization_configuration_feature.org_k8s_log[0]
+}
+
+moved {
+  from = aws_guardduty_organization_configuration_feature.org_malware_protection
+  to   = aws_guardduty_organization_configuration_feature.org_malware_protection[0]
 }
 
 resource "aws_guardduty_member" "members" {
