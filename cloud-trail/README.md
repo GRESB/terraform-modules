@@ -35,7 +35,7 @@ No requirements.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.26.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.67.0 |
 
 ## Modules
 
@@ -62,6 +62,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_advanced_event_selector"></a> [advanced\_event\_selector](#input\_advanced\_event\_selector) | Advanced event selectors for the trail. Mutually exclusive with event\_selector. See: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudtrail#advanced_event_selector | <pre>list(object({<br/>    name = optional(string)<br/><br/>    field_selector = list(object({<br/>      field           = string<br/>      equals          = optional(list(string))<br/>      not_equals      = optional(list(string))<br/>      starts_with     = optional(list(string))<br/>      not_starts_with = optional(list(string))<br/>      ends_with       = optional(list(string))<br/>      not_ends_with   = optional(list(string))<br/>    }))<br/>  }))</pre> | `[]` | no |
 | <a name="input_cloudwatch_log_group_arn"></a> [cloudwatch\_log\_group\_arn](#input\_cloudwatch\_log\_group\_arn) | The ARN of a log group, that represents the log group to which CloudTrail logs will be delivered | `string` | `""` | no |
 | <a name="input_cloudwatch_log_group_name"></a> [cloudwatch\_log\_group\_name](#input\_cloudwatch\_log\_group\_name) | The name for the CloudWatch log group created by this module. Leave empty to have a default name set | `string` | `""` | no |
 | <a name="input_cloudwatch_log_stream_prefix"></a> [cloudwatch\_log\_stream\_prefix](#input\_cloudwatch\_log\_stream\_prefix) | The prefix for the CloudWatch log stream | `string` | `""` | no |

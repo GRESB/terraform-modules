@@ -1,9 +1,9 @@
-variable project {
+variable "project" {
   type    = string
   default = "prj"
 }
 
-variable environment {
+variable "environment" {
   type    = string
   default = "env"
 }
@@ -20,7 +20,7 @@ variable "enabled" {
   default     = true
 }
 
-variable trail_name {
+variable "trail_name" {
   description = "The name for the trail, leave empty to have a default name assigned"
   type        = string
   default     = ""
@@ -153,3 +153,22 @@ variable "event_selector" {
   default = []
 }
 
+variable "advanced_event_selector" {
+  description = "Advanced event selectors for the trail. Mutually exclusive with event_selector. See: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudtrail#advanced_event_selector"
+
+  type = list(object({
+    name = optional(string)
+
+    field_selector = list(object({
+      field           = string
+      equals          = optional(list(string))
+      not_equals      = optional(list(string))
+      starts_with     = optional(list(string))
+      not_starts_with = optional(list(string))
+      ends_with       = optional(list(string))
+      not_ends_with   = optional(list(string))
+    }))
+  }))
+
+  default = []
+}
