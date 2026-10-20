@@ -106,6 +106,14 @@ resource "aws_guardduty_organization_configuration_feature" "org_rds_login" {
 
   name        = "RDS_LOGIN_EVENTS"
   auto_enable = "ALL"
+
+  # AWS returns this sub-feature on every read. Left undeclared, the provider
+  # plans a destroy-and-recreate of the whole feature on every run. "NONE" is
+  # the value AWS reports today, so declaring it changes nothing.
+  additional_configuration {
+    name        = "RDS_DATA_RISK"
+    auto_enable = "NONE"
+  }
 }
 
 resource "aws_guardduty_organization_configuration_feature" "org_lambda_network" {
